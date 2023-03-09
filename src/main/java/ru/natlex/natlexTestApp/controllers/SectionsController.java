@@ -11,6 +11,7 @@ import ru.natlex.natlexTestApp.dto.SectionDTO;
 import ru.natlex.natlexTestApp.models.GeologicalClass;
 import ru.natlex.natlexTestApp.models.Section;
 import ru.natlex.natlexTestApp.services.SectionsServices;
+import ru.natlex.natlexTestApp.services.SectionsServicesImp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ public class SectionsController {
     private final SectionsServices sectionServiceService;
 
     @Autowired
-    public SectionsController(SectionsServices sectionServiceService) {
+    public SectionsController(SectionsServicesImp sectionServiceService) {
         this.sectionServiceService = sectionServiceService;
     }
     @GetMapping("/by-code")
