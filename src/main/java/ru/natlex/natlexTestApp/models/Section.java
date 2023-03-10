@@ -17,7 +17,7 @@ public class Section {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "section", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "section", fetch = FetchType.EAGER)
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<GeologicalClass> geologicalClasses;
 
