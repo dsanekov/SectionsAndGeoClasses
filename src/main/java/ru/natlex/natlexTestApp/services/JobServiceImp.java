@@ -1,9 +1,13 @@
 package ru.natlex.natlexTestApp.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+import ru.natlex.natlexTestApp.exceptions.ExportException;
 import ru.natlex.natlexTestApp.repositories.GeologicalClassRepository;
 import ru.natlex.natlexTestApp.repositories.SectionsRepository;
 import ru.natlex.natlexTestApp.util.Job;
@@ -41,7 +45,18 @@ public class JobServiceImp implements JobService{
     }
 
     @Override
-    public ResponseEntity<String> returnsFileByJobId(int id) {
-        return null;
+    public ModelAndView returnsFileByJobId(int id) {
+        try {
+            if(Job.findJobById(id).getJobStatus().equals(JobStatus.IN_PROGRESS)){
+                throw new ExportException();
+            }
+        }
+        catch (ExportException e){
+            e.printStackTrace();
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setStatus(HttpStatus.NOT_FOUND);
+            return modelAndView;
+        }
+        return Job.findJobById(id).getModelAndView();
     }
 }

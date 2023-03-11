@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import ru.natlex.natlexTestApp.services.JobService;
 import ru.natlex.natlexTestApp.util.JobStatus;
 
@@ -38,7 +39,7 @@ public class FilesController {
     }
 
     @GetMapping("/export/{id}/file")
-    public ResponseEntity<String> returnsFileByJobId(@PathVariable("id") int id) {
+    public ModelAndView returnsFileByJobId(@PathVariable("id") int id) {
 
         return jobService.returnsFileByJobId(id);
 

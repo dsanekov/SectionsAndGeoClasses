@@ -57,7 +57,6 @@ public class XLSImportService {
                     while (cellIterator.hasNext()) {
                         Cell cell = cellIterator.next();
                         if(cell.getRowIndex()==0){
-                            System.out.println("First Row cells");
                             break;
                         }
 
@@ -66,7 +65,6 @@ public class XLSImportService {
                             String sectionsName = cell.getStringCellValue();
                             section.setName(sectionsName);
                             sectionsRepository.save(section);
-                            System.out.println(section.getName() + " - " + section.getId());
                         }
 
                         GeologicalClass geologicalClass = new GeologicalClass();
@@ -78,7 +76,6 @@ public class XLSImportService {
                             geologicalClass.setSection(section);
                             geologicalClassRepository.save(geologicalClass);
                             geoCurrentId = geologicalClass.getId();
-                            System.out.println(geologicalClass.getName() + " " + geologicalClass.getId() + " " + geologicalClass.getCode());
                         }
                         if(cell.getColumnIndex() != 0 && cell.getColumnIndex() % 2 == 0 && !cell.getStringCellValue().isEmpty() && !cell.getStringCellValue().isBlank() && cell.getCellType() != NUMERIC){
                             //2,4,6,8 geoclass code
@@ -89,7 +86,6 @@ public class XLSImportService {
                                 updateGeoClass.setCode(geoClassCode);
                                 geologicalClassRepository.save(updateGeoClass);
                             }
-                            System.out.println(geologicalClass.getName() + " " + geologicalClass.getId() + " " + geologicalClass.getCode());
                         }
                     }
                 }
@@ -98,6 +94,7 @@ public class XLSImportService {
             }
             catch (Exception e) {
                 e.printStackTrace();
+                job.setJobStatus(JobStatus.ERROR);
             }
         });
         executorService.shutdown();
