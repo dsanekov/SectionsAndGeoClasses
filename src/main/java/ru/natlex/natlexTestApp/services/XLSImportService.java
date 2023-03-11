@@ -8,6 +8,8 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.natlex.natlexTestApp.models.GeologicalClass;
 import ru.natlex.natlexTestApp.models.Section;
@@ -37,6 +39,7 @@ public class XLSImportService {
         this.geologicalClassRepository = geologicalClassRepository;
     }
 
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public int startImporting(MultipartFile multipartFile){
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         Job job = new Job(JobStatus.IN_PROGRESS);

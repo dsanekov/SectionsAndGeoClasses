@@ -10,10 +10,6 @@ import java.util.Set;
 
 @Repository
 public interface GeologicalClassRepository extends JpaRepository<GeologicalClass,Integer> {
-    //SELECT COUNT(*) AS Count
-    //FROM geologicalclass
-    //GROUP BY geologicalclass.section_id
-    //ORDER BY Count DESC LIMIT 1
     @Query(value = "SELECT COUNT(*) AS Count FROM geologicalclass GROUP BY geologicalclass.section_id ORDER BY Count DESC LIMIT 1", nativeQuery = true)
     int findMaxGeo();
 }

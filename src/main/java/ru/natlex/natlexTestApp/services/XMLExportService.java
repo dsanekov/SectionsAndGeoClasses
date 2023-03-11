@@ -2,6 +2,8 @@ package ru.natlex.natlexTestApp.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 import ru.natlex.natlexTestApp.models.Section;
 import ru.natlex.natlexTestApp.repositories.GeologicalClassRepository;
@@ -24,16 +26,17 @@ public class XMLExportService {
         this.geologicalClassRepository = geologicalClassRepository;
     }
 
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public int startExporting(){
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         Job job = new Job(JobStatus.IN_PROGRESS);
-        job.setModelAndView(new ModelAndView());
         executorService.execute(() -> {
             try {
                 int columnCount = geologicalClassRepository.findMaxGeo()*2;
-                job.getModelAndView().setView(new ExelExportBuilder(geologicalClassRepository, columnCount));
                 List<Section> sections = sectionsRepository.findAll();
-                job.getModelAndView().addObject("sections",sections);
+                ExelExportBuilder exelExportBuilder = new ExelExportBuilder(columnCount);
+                job.setExelExportBuilder(exelExportBuilder);
+                job.getExelExportBuilder().buildExcelDocument(sections);
                 job.setJobStatus(JobStatus.DONE);
             }
             catch (Exception e) {
@@ -42,7 +45,6 @@ public class XMLExportService {
             }
         });
         executorService.shutdown();
-
         return job.getId();
     }
 }

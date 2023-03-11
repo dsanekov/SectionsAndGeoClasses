@@ -1,7 +1,9 @@
 package ru.natlex.natlexTestApp.services;
 
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -11,36 +13,31 @@ import ru.natlex.natlexTestApp.models.GeologicalClass;
 import ru.natlex.natlexTestApp.models.Section;
 import ru.natlex.natlexTestApp.repositories.GeologicalClassRepository;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 
-public class ExelExportBuilder extends AbstractXlsView {
+public class ExelExportBuilder {
 
-    private GeologicalClassRepository geologicalClassRepository;
     private int columnCount;
-    public ExelExportBuilder(GeologicalClassRepository geologicalClassRepository, int columnCount) {
-        this.geologicalClassRepository = geologicalClassRepository;
+    private HSSFWorkbook workbook;
+    public ExelExportBuilder(int columnCount) {
         this.columnCount = columnCount;
+        workbook = new HSSFWorkbook();
     }
 
-    @Override
-    protected void buildExcelDocument(Map<String, Object> model,
-                                      Workbook workbook,
-                                      HttpServletRequest request,
-                                      HttpServletResponse response) throws Exception {
+    protected void buildExcelDocument(List<Section> sections) throws Exception {
 
-        response.addHeader("Content-Disposition", "attachment;fileName=exportSections.xls");
-
-
-        @SuppressWarnings("unchecked")
-        List<Section> sections = (List<Section>) model.get("sections");
         Sheet sheet = workbook.createSheet("Sections");
-
         Row rowHead = sheet.createRow(0);
         Cell cellHead0 = rowHead.createCell(0);
         cellHead0.setCellValue("Section name");
-
 
         int classNum = 1;
         for (int i = 1; i <= columnCount ; i++) {
@@ -69,4 +66,27 @@ public class ExelExportBuilder extends AbstractXlsView {
             }
         }
     }
+
+    public void export(HttpServletResponse response) throws IOException {
+        ServletOutputStream outputStream = response.getOutputStream();
+        workbook.write(outputStream);
+        workbook.close();
+        outputStream.close();
+        //You can save file on disk.
+        //saveXLSFileOnPC();
+    }
+    public void saveXLSFileOnPC(){
+        try
+        {
+            //Write the workbook in file system
+            FileOutputStream out = new FileOutputStream(new File("sections.xls"));
+            workbook.write(out);
+            out.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
 }

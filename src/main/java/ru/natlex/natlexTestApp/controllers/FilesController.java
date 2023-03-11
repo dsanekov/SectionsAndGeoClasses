@@ -1,5 +1,6 @@
 package ru.natlex.natlexTestApp.controllers;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -7,6 +8,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import ru.natlex.natlexTestApp.services.JobService;
 import ru.natlex.natlexTestApp.util.JobStatus;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @RestController
 public class FilesController {
@@ -19,7 +24,6 @@ public class FilesController {
 
     @PostMapping("/import")
     public int importFile(@RequestParam("file") MultipartFile file) {
-        System.out.println(file.getName());
         return jobService.startImport(file);
     }
 
@@ -39,9 +43,13 @@ public class FilesController {
     }
 
     @GetMapping("/export/{id}/file")
-    public ModelAndView returnsFileByJobId(@PathVariable("id") int id) {
-
-        return jobService.returnsFileByJobId(id);
-
+    public void returnsFileByJobId(@PathVariable("id") int id, HttpServletResponse response) {
+        response.setContentType("application/octet-stream");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=sections_" + currentDateTime + ".xls";
+        response.setHeader(headerKey, headerValue);
+        jobService.returnsFileByJobId(id,response);
     }
 }
