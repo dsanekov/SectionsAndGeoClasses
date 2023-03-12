@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.servlet.ModelAndView;
 import ru.natlex.natlexTestApp.models.Section;
 import ru.natlex.natlexTestApp.repositories.GeologicalClassRepository;
 import ru.natlex.natlexTestApp.repositories.SectionsRepository;
@@ -16,12 +15,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Service
-public class XMLExportService {
+public class XLSExportService {
     private SectionsRepository sectionsRepository;
     private GeologicalClassRepository geologicalClassRepository;
 
     @Autowired
-    public XMLExportService(SectionsRepository sectionsRepository, GeologicalClassRepository geologicalClassRepository) {
+    public XLSExportService(SectionsRepository sectionsRepository, GeologicalClassRepository geologicalClassRepository) {
         this.sectionsRepository = sectionsRepository;
         this.geologicalClassRepository = geologicalClassRepository;
     }
