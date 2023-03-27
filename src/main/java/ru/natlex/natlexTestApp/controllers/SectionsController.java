@@ -5,9 +5,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import ru.natlex.natlexTestApp.dto.GeologicalClassDTO;
 import ru.natlex.natlexTestApp.dto.SectionDTO;
 import ru.natlex.natlexTestApp.dto.UnsuccessfulResponse;
@@ -18,6 +18,7 @@ import ru.natlex.natlexTestApp.services.SectionsServicesImp;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -42,6 +43,33 @@ public class SectionsController {
             sectionDTOS.add(convertToSectionDTO(section));
         }
         return new ResponseEntity<>(sectionDTOS, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> showSection(@PathVariable("id") int id) {
+        Section section = sectionServiceService.findSectionById(id);
+        if(section == null){
+            return new ResponseEntity<>(new UnsuccessfulResponse("This section does not exist!",HttpStatus.NOT_FOUND.value()),HttpStatus.NOT_FOUND);
+        }
+        SectionDTO sectionDTO = convertToSectionDTO(section);
+        return new ResponseEntity<>(sectionDTO,HttpStatus.OK);
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> delete(@PathVariable("id") int id) {
+        sectionServiceService.delete(id);
+        return new ResponseEntity<>("Section was delete",HttpStatus.OK);
+    }
+    @PostMapping("/new/{name}")
+    public ResponseEntity<Object> create(@PathVariable("name") String name) {
+        int id = sectionServiceService.create(name);
+        return new ResponseEntity<>(id,HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/edit/{name}")
+    public ResponseEntity<Object> edit(@PathVariable("id") int id, @PathVariable("name") String name) {
+        Section section = sectionServiceService.edit(id,name);
+        SectionDTO sectionDTO = convertToSectionDTO(section);
+        return new ResponseEntity<>(sectionDTO,HttpStatus.OK);
     }
 
     private Section convertToSection(SectionDTO sectionDTO){

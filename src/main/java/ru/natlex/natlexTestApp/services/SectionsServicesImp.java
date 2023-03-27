@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.natlex.natlexTestApp.models.Section;
 import ru.natlex.natlexTestApp.repositories.SectionsRepository;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -23,4 +24,32 @@ public class SectionsServicesImp implements SectionsServices{
     public Set<Section> findSectionsByCode(String code){
         return sectionsRepository.findSectionsByGeologicalClassCode(code);
     }
+
+    @Override
+    public Section findSectionById(int id) {
+        Optional<Section> optionalSection = sectionsRepository.findById(id);
+        return optionalSection.orElse(null);
+    }
+
+    @Override
+    public void delete(int id) {
+        Section sectionToDelete = findSectionById(id);
+        sectionsRepository.delete(sectionToDelete);
+    }
+
+    @Override
+    public int create(String name) {
+        Section section = new Section();
+        section.setName(name);
+        return sectionsRepository.save(section).getId();
+    }
+
+    @Override
+    public Section edit(int id, String name) {
+        Section section = findSectionById(id);
+        section.setName(name);
+        sectionsRepository.save(section);
+        return section;
+    }
+
 }
