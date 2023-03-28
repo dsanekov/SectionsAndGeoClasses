@@ -5,17 +5,19 @@ import ru.natlex.natlexTestApp.services.ExelExportBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Job {
-    private static int JOBS_COUNT = 0;
-    private static List<Job> jobs = new ArrayList<>();
+    private static AtomicInteger JOBS_COUNT = new AtomicInteger(0);
+    private static CopyOnWriteArrayList<Job> jobs = new CopyOnWriteArrayList<>();
     private JobStatus jobStatus;
     private ExelExportBuilder exelExportBuilder;
     private int id;
 
     public Job(JobStatus jobStatus) {
         this.jobStatus = jobStatus;
-        this.id = ++JOBS_COUNT;
+        this.id = JOBS_COUNT.incrementAndGet();
         jobs.add(this);
     }
 
@@ -35,11 +37,11 @@ public class Job {
         this.id = id;
     }
 
-    public static List<Job> getJobs() {
+    public static CopyOnWriteArrayList<Job> getJobs() {
         return jobs;
     }
 
-    public static void setJobs(List<Job> jobs) {
+    public static void setJobs(CopyOnWriteArrayList<Job> jobs) {
         Job.jobs = jobs;
     }
 

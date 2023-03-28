@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.natlex.natlexTestApp.models.Section;
 import ru.natlex.natlexTestApp.repositories.SectionsRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -50,6 +51,11 @@ public class SectionsServicesImp implements SectionsServices{
         section.setName(name);
         sectionsRepository.save(section);
         return section;
+    }
+
+    @Override
+    public List<Section> showAll() {
+        return sectionsRepository.findAll();
     }
 
 }

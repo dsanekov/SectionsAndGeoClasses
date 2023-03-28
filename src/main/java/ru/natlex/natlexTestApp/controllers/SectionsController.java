@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.natlex.natlexTestApp.NatlexTestAppApplication;
 import ru.natlex.natlexTestApp.dto.GeologicalClassDTO;
 import ru.natlex.natlexTestApp.dto.SectionDTO;
 import ru.natlex.natlexTestApp.dto.UnsuccessfulResponse;
@@ -31,6 +32,18 @@ public class SectionsController {
     public SectionsController(SectionsServicesImp sectionServiceService) {
         this.sectionServiceService = sectionServiceService;
     }
+
+    @GetMapping()
+    public ResponseEntity<Object> showSections(){
+        List<Section> sectionList = sectionServiceService.showAll();
+        List<SectionDTO> sectionDTOList = new ArrayList<>();
+        for(Section section : sectionList){
+            SectionDTO sectionDTO = convertToSectionDTO(section);
+            sectionDTOList.add(sectionDTO);
+        }
+        return new ResponseEntity<>(sectionDTOList, HttpStatus.OK);
+    }
+
     @GetMapping("/by-code")
     public ResponseEntity<Object> findSectionByCode(HttpServletRequest request){
         String code = request.getParameter("code");
@@ -57,7 +70,7 @@ public class SectionsController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable("id") int id) {
         sectionServiceService.delete(id);
-        return new ResponseEntity<>("Section was delete",HttpStatus.OK);
+        return new ResponseEntity<>("Section has been deleted",HttpStatus.OK);
     }
     @PostMapping("/new/{name}")
     public ResponseEntity<Object> create(@PathVariable("name") String name) {

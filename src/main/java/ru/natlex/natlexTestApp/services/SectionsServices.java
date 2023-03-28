@@ -2,6 +2,7 @@ package ru.natlex.natlexTestApp.services;
 
 import ru.natlex.natlexTestApp.models.Section;
 
+import java.util.List;
 import java.util.Set;
 
 public interface SectionsServices {
@@ -14,4 +15,6 @@ public interface SectionsServices {
     int create(String name);
 
     Section edit(int id, String name);
+
+    List<Section> showAll();
 }
