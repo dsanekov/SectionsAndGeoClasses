@@ -1,4 +1,4 @@
-# natlexTestApp project
+# Sections and GeoClasses project
 
 ## Technology stack
 
