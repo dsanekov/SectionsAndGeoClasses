@@ -21,7 +21,19 @@ Each XLS file contains headers and list of sections with it’s geological class
 ![image](https://user-images.githubusercontent.com/119116584/224563622-452d4a2c-1c7d-4617-96d8-d7449fa4fd39.png)
 
 ## Web interface
-- Add API GET /sections/by-code?code=... that returns a list of all Sections that have geologicalClasses with the specified code.
+- API GET /sections returns a list of all Sections.
+- API GET /sections/{id} returns a Section by id.
+- API GET /sections/{id}/edit/{name} edit Section's name with this id.
+- API GET /sections/by-code?code=... that returns a list of all Sections that have geologicalClasses with the specified code.
+- API POST /sections/new/{name} create new Section with this name.
+- API DELETE /sections/{id} delete Section with this id.
+
+- API GET /geo-class returns a list of all GeologicalClasses.
+- API GET /geo-class/{id} returns a GeologicalClasse by id.
+- API POST /geo-class/new?code=...&name=... create new GeologicalClasse with this name and code.
+- API GET /geo-class/{id}/edit?code=...&name=... edit GeologicalClasse's code and name.
+- API DELETE /geo-class/{id} delete GeologicalClasse with this id.
+
 - API POST /import (file) returns ID of the Async Job and launches importing.
 - API GET /import/{id} returns result of importing by Job ID ("DONE", "IN PROGRESS", "ERROR").
 - API GET /export returns ID of the Async Job and launches exporting.
