@@ -1,11 +1,11 @@
 # natlexTestApp project
-Test backend task for Natlex.
 
 ## Technology stack
 
 - Java Core,
 - Spring Boot,
 - Spring Data,
+- Spring Security,
 - Hibernate,
 - PostgreSQL,
 - Apache POI.
