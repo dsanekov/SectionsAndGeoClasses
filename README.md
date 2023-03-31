@@ -20,6 +20,11 @@ Each XLS file contains headers and list of sections with it’s geological class
 
 ![image](https://user-images.githubusercontent.com/119116584/224563622-452d4a2c-1c7d-4617-96d8-d7449fa4fd39.png)
 
+## Authorization:
+- API POST /registration.
+
+![image](https://user-images.githubusercontent.com/119116584/229227364-47096111-9b33-41ed-abf1-a2bd013d2718.png)
+
 ## Web interface
 - API GET /sections returns a list of all Sections.
 - API GET /sections/{id} returns a Section by id.
@@ -39,9 +44,6 @@ Each XLS file contains headers and list of sections with it’s geological class
 - API GET /export returns ID of the Async Job and launches exporting.
 - API GET /export/{id} returns result of parsed file by Job ID ("DONE", "IN PROGRESS", "ERROR").
 - API GET /export/{id}/file returns a file by Job ID (throw an exception if exporting is in process).
-
-## Authorization:
-- Username user, password user.
 
 ## Set up before starting
 
